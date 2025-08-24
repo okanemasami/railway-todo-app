@@ -1,4 +1,4 @@
-export const CheckIcon = (props) => (
+export const CheckIcon = props => (
   <svg
     width="16"
     height="16"

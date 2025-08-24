@@ -43,10 +43,7 @@ export const Sidebar = () => {
                       to={`/lists/${listItem.id}`}
                       className="sidebar__lists_item"
                     >
-                      <ListIcon
-                        aria-hidden
-                        className="sidebar__lists_icon"
-                      />
+                      <ListIcon aria-hidden className="sidebar__lists_icon" />
                       {listItem.title}
                     </Link>
                   </li>

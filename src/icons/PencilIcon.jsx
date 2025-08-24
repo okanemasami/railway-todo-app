@@ -1,4 +1,4 @@
-export const PencilIcon = (props) => (
+export const PencilIcon = props => (
   <svg
     width="24"
     height="24"

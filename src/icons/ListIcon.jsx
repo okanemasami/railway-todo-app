@@ -1,4 +1,4 @@
-export const ListIcon = (props) => {
+export const ListIcon = props => {
   return (
     <svg
       width="24"

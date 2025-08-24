@@ -105,9 +105,7 @@ export const TaskCreateForm = () => {
               className="task_create_form__mark____complete"
               aria-label="Completed"
             >
-              <CheckIcon
-                className="task_create_form__mark____complete_check"
-              />
+              <CheckIcon className="task_create_form__mark____complete_check" />
             </div>
           ) : (
             <div

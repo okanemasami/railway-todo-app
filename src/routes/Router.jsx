@@ -12,7 +12,7 @@ import EditList from '~/pages/lists/[listId]/edit/index.page'
 import ListIndex from '~/pages/lists/[listId]/index.page'
 
 export const Router = () => {
-  const auth = useSelector((state) => state.auth.token !== null)
+  const auth = useSelector(state => state.auth.token !== null)
 
   return (
     <BrowserRouter>
