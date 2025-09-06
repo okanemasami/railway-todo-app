@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useLogin } from '~/hooks/useLogin'
 import { useId } from '~/hooks/useId'
 import './index.css'
+import { FormActions } from '~/components/ui/FormActions'
+import { AppTextField } from '~/components/ui/AppTextField'
 
 const SignIn = () => {
   const auth = useSelector(state => state.auth.token !== null)
@@ -46,12 +48,12 @@ const SignIn = () => {
           <label htmlFor={`${id}-email`} className="signin__form_label">
             E-mail Address
           </label>
-          <input
+          <AppTextField
             id={`${id}-email`}
             type="email"
             autoComplete="email"
-            className="app_input"
             value={email}
+            required
             onChange={event => setEmail(event.target.value)}
           />
         </fieldset>
@@ -59,24 +61,20 @@ const SignIn = () => {
           <label htmlFor={`${id}-password`} className="signin__form_label">
             Password
           </label>
-          <input
+          <AppTextField
             id={`${id}-password`}
             type="password"
             autoComplete="current-password"
-            className="app_input"
             value={password}
+            required
             onChange={event => setPassword(event.target.value)}
           />
         </fieldset>
-        <div className="signin__form_actions">
-          <Link className="app_button" data-variant="secondary" to="/signup">
-            Register
-          </Link>
-          <div className="signin__form_actions_spacer"></div>
-          <button type="submit" className="app_button" disabled={isSubmitting}>
-            Login
-          </button>
-        </div>
+        <FormActions
+          leftButton={{ to: '/signup', text: 'Register' }}
+          rightButton={{ text: 'Login', type: 'submit' }}
+          isSubmitting={isSubmitting}
+        />
       </form>
     </main>
   )

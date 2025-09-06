@@ -1,0 +1,14 @@
+.form_actions {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .form_actions_spacer {
+    flex: 1;
+  }
+  
+  .form_actions .app_button .form_actions_delete {
+    --app-button-accent-color: var(--red-500);
+  }

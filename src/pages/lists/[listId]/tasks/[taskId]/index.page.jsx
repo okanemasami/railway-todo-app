@@ -2,10 +2,12 @@ import { useCallback, useState, useEffect } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { BackButton } from '~/components/BackButton'
+import { FormActions } from '~/components/ui/FormActions'
 import './index.css'
 import { setCurrentList } from '~/store/list'
 import { fetchTasks, updateTask, deleteTask } from '~/store/task'
 import { useId } from '~/hooks/useId'
+import { AppTextField } from '~/components/ui/AppTextField'
 
 const EditTask = () => {
   const id = useId()
@@ -17,6 +19,7 @@ const EditTask = () => {
   const [title, setTitle] = useState('')
   const [detail, setDetail] = useState('')
   const [done, setDone] = useState(false)
+  const [limit, setLimit] = useState('')
 
   const [errorMessage, setErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -30,6 +33,14 @@ const EditTask = () => {
       setTitle(task.title)
       setDetail(task.detail)
       setDone(task.done)
+      const iso = task.limit || ''
+      const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):\d{2}:\d{2}Z$/)
+      if (m) {
+        // 表示は日本語形式: YYYY年MM月DD日HH時（分・秒は00固定）
+        setLimit(`${m[1]}年${Number(m[2])}月${Number(m[3])}日${Number(m[4])}時`)
+      } else {
+        setLimit(iso)
+      }
     }
   }, [task])
 
@@ -44,7 +55,25 @@ const EditTask = () => {
 
       setIsSubmitting(true)
 
-      void dispatch(updateTask({ id: taskId, title, detail, done }))
+      const raw = limit && limit.trim() !== '' ? limit.trim() : ''
+      let nextLimit = null
+      if (raw) {
+        // 日本語形式: YYYY年M月D日H時 → ISO: YYYY-MM-DDTHH:00:00Z
+        const jp = raw.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日(\d{1,2})時$/)
+        if (jp) {
+          const yyyy = jp[1]
+          const mm = String(jp[2]).padStart(2, '0')
+          const dd = String(jp[3]).padStart(2, '0')
+          const hh = String(jp[4]).padStart(2, '0')
+          nextLimit = `${yyyy}-${mm}-${dd}T${hh}:00:00Z`
+        } else {
+          // 後方互換: 旧形式/ISO も許容
+          const m1 = raw.match(/^(\d{4}-\d{2}-\d{2})-(\d{2}:\d{2}:\d{2})$/)
+          if (m1) nextLimit = `${m1[1]}T${m1[2]}Z`
+          else nextLimit = raw
+        }
+      }
+      void dispatch(updateTask({ id: taskId, title, detail, done, limit: nextLimit }))
         .unwrap()
         .then(() => {
           history.push(`/lists/${listId}`)
@@ -56,7 +85,7 @@ const EditTask = () => {
           setIsSubmitting(false)
         })
     },
-    [title, taskId, listId, detail, done],
+    [title, taskId, listId, detail, done, limit],
   )
 
   const handleDelete = useCallback(() => {
@@ -89,11 +118,11 @@ const EditTask = () => {
           <label htmlFor={`${id}-title`} className="edit_list__form_label">
             Title
           </label>
-          <input
+          <AppTextField
             id={`${id}-title`}
-            className="app_input"
             placeholder="Buy some milk"
             value={title}
+            required
             onChange={event => setTitle(event.target.value)}
           />
         </fieldset>
@@ -101,11 +130,12 @@ const EditTask = () => {
           <label htmlFor={`${id}-detail`} className="edit_list__form_label">
             Description
           </label>
-          <textarea
+          <AppTextField
             id={`${id}-detail`}
-            className="app_input"
             placeholder="Blah blah blah"
             value={detail}
+            required
+            multiline
             onChange={event => setDetail(event.target.value)}
           />
         </fieldset>
@@ -122,23 +152,21 @@ const EditTask = () => {
             />
           </div>
         </fieldset>
-        <div className="edit_list__form_actions">
-          <Link to="/" data-variant="secondary" className="app_button">
-            Cancel
-          </Link>
-          <div className="edit_list__form_actions_spacer"></div>
-          <button
-            type="button"
-            className="app_button edit_list__form_actions_delete"
-            disabled={isSubmitting}
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-          <button type="submit" className="app_button" disabled={isSubmitting}>
-            Update
-          </button>
-        </div>
+        <fieldset className="edit_list__form_field">
+          <label htmlFor={`${id}-limit`} className="edit_list__form_label">タスク期限（例: 2025年10月21日22時）</label>
+          <AppTextField
+            id={`${id}-limit`}
+            placeholder="2025年10月21日22時"
+            value={limit}
+            onChange={event => setLimit(event.target.value)}
+          />
+        </fieldset>
+        <FormActions
+          leftButton={{ to: '/', text: 'Cancel' }}
+          middleButton={{ text: 'Delete', onClick: handleDelete, className: 'edit_list__form_actions_delete' }}
+          rightButton={{ text: 'Update', type: 'submit' }}
+          isSubmitting={isSubmitting}
+        />
       </form>
     </main>
   )

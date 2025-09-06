@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux'
 import './index.css'
 import { useSignup } from '~/hooks/useSignup'
 import { useId } from '~/hooks/useId'
+import { FormActions } from '~/components/ui/FormActions'
+import { AppTextField } from '~/components/ui/AppTextField'
 
 const SignUp = () => {
   const auth = useSelector(state => state.auth.token !== null)
@@ -48,11 +50,12 @@ const SignUp = () => {
           <label htmlFor={`${id}-email`} className="signup__form_label">
             E-mail Address
           </label>
-          <input
+          <AppTextField
             id={`${id}-email`}
             autoComplete="email"
-            className="app_input"
             value={email}
+            type="email"
+            required
             onChange={event => setEmail(event.target.value)}
           />
         </fieldset>
@@ -64,11 +67,11 @@ const SignUp = () => {
           >
             Name
           </label>
-          <input
+          <AppTextField
             id={`${id}-name`}
             type="text"
-            className="app_input"
             value={name}
+            required
             onChange={event => setName(event.target.value)}
           />
         </fieldset>
@@ -80,23 +83,27 @@ const SignUp = () => {
           >
             Password
           </label>
-          <input
+          <AppTextField
             id={`${id}-password`}
             type="password"
-            className="app_input"
             value={password}
+            autoComplete="new-password"
+            required
             onChange={event => setPassword(event.target.value)}
           />
         </fieldset>
-        <div className="signup__form_actions">
-          <Link className="app_button" data-variant="secondary" to="/signin">
-            Login
-          </Link>
-          <div className="signup__form_actions_spacer"></div>
-          <button type="submit" className="app_button" disabled={isSubmitting}>
-            Register
-          </button>
-        </div>
+
+        <FormActions
+          leftButton={{
+            to: '/signin',
+            text: 'Login',
+          }}
+          rightButton={{
+            type: 'submit',
+            text: 'Register',
+            disabled: isSubmitting,
+          }}
+        />
       </form>
     </main>
   )

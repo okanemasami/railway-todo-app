@@ -27,7 +27,7 @@ const ListIndex = () => {
 
   useEffect(() => {
     dispatch(setCurrentList(listId))
-    dispatch(fetchTasks()).unwrap()
+    dispatch(fetchTasks({ force: true })).unwrap()
   }, [listId])
 
   if (isLoading) {
@@ -44,9 +44,7 @@ const ListIndex = () => {
           </span>
         )}
         <div className="tasks_list__title_spacer"></div>
-        <Link to={`/lists/${listId}/edit`}>
-          <button className="app_button">Edit...</button>
-        </Link>
+        <Link to={`/lists/${listId}/edit`} className="app_button">Edit...</Link>
       </div>
       <div className="tasks_list__items">
         <TaskCreateForm />

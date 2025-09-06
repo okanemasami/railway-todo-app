@@ -94,3 +94,22 @@
 .task_create_form__spacer {
   flex: 1;
 }
+
+.task_create_form__limit_row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.task_create_form__limit_label {
+  color: var(--slate-800);
+}
+
+.task_create_form__limit_input {
+  flex: 1;
+  background: transparent;
+  color: var(--slate-500);
+  border: none;
+  outline: none;
+}

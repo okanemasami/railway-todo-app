@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import './TaskCreateForm.css'
 import { CheckIcon } from '~/icons/CheckIcon'
 import { createTask } from '~/store/task'
+import { FormActions } from './ui/FormActions'
 
 export const TaskCreateForm = () => {
   const dispatch = useDispatch()
@@ -15,6 +16,7 @@ export const TaskCreateForm = () => {
   const [title, setTitle] = useState('')
   const [detail, setDetail] = useState('')
   const [done, setDone] = useState(false)
+  const [limit, setLimit] = useState('')
 
   const handleToggle = useCallback(() => {
     setDone(prev => !prev)
@@ -44,6 +46,7 @@ export const TaskCreateForm = () => {
   const handleDiscard = useCallback(() => {
     setTitle('')
     setDetail('')
+    setLimit('')
     setFormState('initial')
     setDone(false)
   }, [])
@@ -54,7 +57,25 @@ export const TaskCreateForm = () => {
 
       setFormState('submitting')
 
-      void dispatch(createTask({ title, detail, done }))
+      const raw = limit && limit.trim() !== '' ? limit.trim() : ''
+      let nextLimit = null
+      if (raw) {
+        // 日本語形式: 2025年10月21日22時 → ISO: YYYY-MM-DDTHH:00:00Z
+        const jp = raw.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日(\d{1,2})時$/)
+        if (jp) {
+          const yyyy = jp[1]
+          const mm = String(jp[2]).padStart(2, '0')
+          const dd = String(jp[3]).padStart(2, '0')
+          const hh = String(jp[4]).padStart(2, '0')
+          nextLimit = `${yyyy}-${mm}-${dd}T${hh}:00:00Z`
+        } else {
+          // 旧形式サポート: YYYY-MM-DD-hh:mm:ss
+          const m = raw.match(/^(\d{4}-\d{2}-\d{2})-(\d{2}:\d{2}:\d{2})$/)
+          nextLimit = m ? `${m[1]}T${m[2]}Z` : raw
+        }
+      }
+
+      void dispatch(createTask({ title, detail, done, limit: nextLimit }))
         .unwrap()
         .then(() => {
           handleDiscard()
@@ -64,7 +85,7 @@ export const TaskCreateForm = () => {
           setFormState('focused')
         })
     },
-    [title, detail, done],
+    [title, detail, done]
   )
 
   useEffect(() => {
@@ -122,6 +143,7 @@ export const TaskCreateForm = () => {
           onChange={e => setTitle(e.target.value)}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          required
           disabled={formState === 'submitting'}
         />
       </div>
@@ -135,29 +157,32 @@ export const TaskCreateForm = () => {
             value={detail}
             onChange={e => setDetail(e.target.value)}
             onBlur={handleBlur}
+            required
             disabled={formState === 'submitting'}
           />
-          <div className="task_create_form__actions">
-            <button
-              type="button"
-              className="app_button"
-              data-variant="secondary"
+          <div className="task_create_form__limit_row">
+            <span className="task_create_form__limit_label">タスク期限：</span>
+            <input
+              type="text"
+              className="task_create_form__limit_input"
+              placeholder="2025年10月21日22時"
+              value={limit}
+              onChange={e => setLimit(e.target.value)}
+              onFocus={handleFocus}
               onBlur={handleBlur}
-              onClick={handleDiscard}
-              disabled={(!title && !detail) || formState === 'submitting'}
-            >
-              Discard
-            </button>
-            <div className="task_create_form__spacer"></div>
-            <button
-              type="submit"
-              className="app_button"
-              onBlur={handleBlur}
-              disabled={!title || !detail || formState === 'submitting'}
-            >
-              Add
-            </button>
+              disabled={formState === 'submitting'}
+            />
           </div>
+          
+          <FormActions
+            leftButton={{
+              text: 'Discard',
+              onClick: handleDiscard,
+              disabled: (!title && !detail) || formState === 'submitting',
+            }}
+            rightButton={{ text: 'Add', type: 'submit' }}
+            isSubmitting={formState === 'submitting'}
+          />
         </div>
       )}
     </form>

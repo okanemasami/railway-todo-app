@@ -74,3 +74,15 @@
   font-size: 1rem;
   color: var(--slate-500);
 }
+
+.task_item__limit {
+  margin-top: 0.25rem;
+}
+
+.task_item__limit_label {
+  color: var(--slate-800);
+}
+
+.task_item__limit_value {
+  color: var(--slate-800);
+}

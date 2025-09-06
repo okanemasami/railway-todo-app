@@ -2,9 +2,11 @@ import { useCallback, useState, useEffect } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { BackButton } from '~/components/BackButton'
+import { FormActions } from '~/components/ui/FormActions'
 import './index.css'
 import { fetchLists, updateList, deleteList } from '~/store/list'
 import { useId } from '~/hooks/useId'
+import { AppTextField } from '~/components/ui/AppTextField'
 
 const EditList = () => {
   const id = useId()
@@ -83,31 +85,20 @@ const EditList = () => {
           <label htmlFor={`${id}-title`} className="edit_list__form_label">
             Name
           </label>
-          <input
+          <AppTextField
             id={`${id}-title`}
-            className="app_input"
             placeholder="Family"
             value={title}
+            required
             onChange={event => setTitle(event.target.value)}
           />
         </fieldset>
-        <div className="edit_list__form_actions">
-          <Link to="/" data-variant="secondary" className="app_button">
-            Cancel
-          </Link>
-          <div className="edit_list__form_actions_spacer"></div>
-          <button
-            type="button"
-            className="app_button edit_list__form_actions_delete"
-            disabled={isSubmitting}
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-          <button type="submit" className="app_button" disabled={isSubmitting}>
-            Update
-          </button>
-        </div>
+        <FormActions
+          leftButton={{ to: '/', text: 'Cancel' }}
+          middleButton={{ text: 'Delete', onClick: handleDelete, className: 'edit_list__form_actions_delete' }}
+          rightButton={{ text: 'Update', type: 'submit' }}
+          isSubmitting={isSubmitting}
+        />
       </form>
     </main>
   )

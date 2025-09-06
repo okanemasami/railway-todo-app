@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { BackButton } from '~/components/BackButton'
 import './index.css'
 import { createList, setCurrentList } from '~/store/list/index'
 import { useId } from '~/hooks/useId'
+import { FormActions } from '~/components/ui/FormActions'
+import { AppTextField } from '~/components/ui/AppTextField'
 
 const NewList = () => {
   const id = useId()
@@ -48,23 +50,19 @@ const NewList = () => {
           <label htmlFor={`${id}-title`} className="new_list__form_label">
             Name
           </label>
-          <input
+          <AppTextField
             id={`${id}-title`}
-            className="app_input"
             placeholder="Family"
             value={title}
+            required
             onChange={event => setTitle(event.target.value)}
           />
         </fieldset>
-        <div className="new_list__form_actions">
-          <Link to="/" data-variant="secondary" className="app_button">
-            Cancel
-          </Link>
-          <div className="new_list__form_actions_spacer"></div>
-          <button type="submit" className="app_button" disabled={isSubmitting}>
-            Create
-          </button>
-        </div>
+        <FormActions
+          leftButton={{ to: '/', text: 'Cancel' }}
+          rightButton={{ text: 'Create', type: 'submit' }}
+          isSubmitting={isSubmitting}
+        />
       </form>
     </main>
   )
