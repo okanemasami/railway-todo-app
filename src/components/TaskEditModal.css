@@ -1,0 +1,35 @@
+/* 完了チェックボックス */
+.task_edit_modal__done_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task_edit_modal__done_label {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* 期限設定ボタン */
+.task_edit_modal__limit_button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.task_edit_modal__limit_button:hover {
+  background: #f5f5f7;
+}
+
+.task_edit_modal__limit_button svg {
+  fill: var(--slate-500);
+}
+
+.task_edit_modal__limit_text {
+  color: var(--slate-500);
+}

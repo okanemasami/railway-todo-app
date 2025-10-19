@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from 'react'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { BackButton } from '~/components/BackButton'
 import { FormActions } from '~/components/ui/FormActions'
@@ -94,9 +94,22 @@ const EditList = () => {
           />
         </fieldset>
         <FormActions
-          leftButton={{ to: '/', text: 'Cancel' }}
-          middleButton={{ text: 'Delete', onClick: handleDelete, className: 'edit_list__form_actions_delete' }}
-          rightButton={{ text: 'Update', type: 'submit' }}
+          buttons={[
+            {
+              to: '/',
+              text: 'Cancel',
+              variant: 'secondary',
+            },
+            {
+              text: 'Delete',
+              onClick: handleDelete,
+              className: 'edit_list__form_actions_delete',
+            },
+            {
+              text: 'Update',
+              type: 'submit',
+            },
+          ]}
           isSubmitting={isSubmitting}
         />
       </form>

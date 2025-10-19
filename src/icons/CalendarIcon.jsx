@@ -1,0 +1,16 @@
+export const CalendarIcon = props => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path d="M7 2C7.55 2 8 2.45 8 3V4H16V3C16 2.45 16.45 2 17 2C17.55 2 18 2.45 18 3V4H19C20.66 4 22 5.34 22 7V19C22 20.66 20.66 22 19 22H5C3.34 22 2 20.66 2 19V7C2 5.34 3.34 4 5 4H6V3C6 2.45 6.45 2 7 2ZM20 9H4V19C4 19.55 4.45 20 5 20H19C19.55 20 20 19.55 20 19V9ZM6 11H8V13H6V11ZM10 11H12V13H10V11ZM14 11H16V13H14V11ZM6 15H8V17H6V15ZM10 15H12V17H10V15ZM14 15H16V17H14V15Z" />
+  </svg>
+)
+
+export default CalendarIcon
+
+
+

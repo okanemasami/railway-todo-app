@@ -5,7 +5,6 @@ import { fetchUser } from '~/store/auth/index'
 
 function App() {
   const dispatch = useDispatch()
-  console.log("hogehoge")
   useEffect(() => {
     void dispatch(fetchUser())
   }, [])

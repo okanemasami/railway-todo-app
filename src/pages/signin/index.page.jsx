@@ -71,8 +71,17 @@ const SignIn = () => {
           />
         </fieldset>
         <FormActions
-          leftButton={{ to: '/signup', text: 'Register' }}
-          rightButton={{ text: 'Login', type: 'submit' }}
+          buttons={[
+            {
+              to: '/signup',
+              text: 'Register',
+              variant: 'secondary',
+            },
+            {
+              text: 'Login',
+              type: 'submit',
+            },
+          ]}
           isSubmitting={isSubmitting}
         />
       </form>

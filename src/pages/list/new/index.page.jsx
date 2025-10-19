@@ -59,8 +59,17 @@ const NewList = () => {
           />
         </fieldset>
         <FormActions
-          leftButton={{ to: '/', text: 'Cancel' }}
-          rightButton={{ text: 'Create', type: 'submit' }}
+          buttons={[
+            {
+              to: '/',
+              text: 'Cancel',
+              variant: 'secondary',
+            },
+            {
+              text: 'Create',
+              type: 'submit',
+            },
+          ]}
           isSubmitting={isSubmitting}
         />
       </form>

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import './index.css'
 import { useSignup } from '~/hooks/useSignup'
@@ -94,15 +94,18 @@ const SignUp = () => {
         </fieldset>
 
         <FormActions
-          leftButton={{
-            to: '/signin',
-            text: 'Login',
-          }}
-          rightButton={{
-            type: 'submit',
-            text: 'Register',
-            disabled: isSubmitting,
-          }}
+          buttons={[
+            {
+              to: '/signin',
+              text: 'Login',
+              variant: 'secondary',
+            },
+            {
+              type: 'submit',
+              text: 'Register',
+            },
+          ]}
+          isSubmitting={isSubmitting}
         />
       </form>
     </main>
